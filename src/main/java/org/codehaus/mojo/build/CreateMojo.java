@@ -247,6 +247,17 @@ public class CreateMojo
                 scmManager.setScmProviderImplementation( providerType, providerImplementation );
             }
         }
+        
+        if ( doCheck )
+        {
+            // we fail if there are local mods
+            checkForLocalModifications();
+        }
+        else
+        {
+            getLog().debug( "Checking for local modifications: skipped." );
+        }
+        
         Date now = Calendar.getInstance().getTime();
         if ( format != null )
         {
@@ -359,15 +370,6 @@ public class CreateMojo
                 return;
             }
 
-            if ( doCheck )
-            {
-                // we fail if there are local mods
-                checkForLocalModifications();
-            }
-            else
-            {
-                getLog().debug( "Checking for local modifications: skipped." );
-            }
             if ( session.getSettings().isOffline() )
             {
                 getLog().info( "maven is executed in offline mode, Updating project files from SCM: skipped." );
